@@ -70,7 +70,7 @@ To enable drawing, you need both the core and the specific tool plugins you inte
 ## 1. Example Install
 
 ```bash
-npm install lightweight-charts-line-tools-core lightweight-charts-line-tools-rectangle lightweight-charts
+npm install github:difurious/lightweight-charts-line-tools-core github:difurious/lightweight-charts-line-tools-rectangle lightweight-charts
 ```
 
 ```typescript
