@@ -5,8 +5,7 @@ This package is the central core orchestrator for individual drawing tools built
 The Core handles the "Hard Math" and "UI Logic"—including coordinate interpolation, infinite line clipping, selection states, drag-and-drop anchors, and axis label stacking—allowing individual drawing tools to remain modular, lightweight, and easy to maintain.
 
 ## 🎥 Video Demo
-
-**Coming Soon!**
+https://github.com/user-attachments/assets/900a6759-d0cd-42e5-a09c-7ed0d94bd42e
 
 ## 🧩 Modular & Community Driven
 The core is designed to be a flexible foundation. While a standard set of line tool plugins is provided, this architecture is intended to empower developers to build their own custom tools using the core's orchestration capabilities. Improvements to the core logic, or the line tools are always welcome.
