@@ -1,6 +1,15 @@
 // /src/utils/geometry.ts
 
-import { Coordinate, ISeriesApi, SeriesType, Time, UTCTimestamp, IChartApiBase, Logical, BarPrice } from 'lightweight-charts';
+import {
+	Coordinate,
+	ISeriesApi,
+	SeriesType,
+	Time,
+	UTCTimestamp,
+	IChartApiBase,
+	Logical,
+	BarPrice,
+} from 'lightweight-charts';
 import { BaseLineTool } from '../model/base-line-tool';
 
 
@@ -15,137 +24,137 @@ import { BaseLineTool } from '../model/base-line-tool';
  */
 export class Point {
 	/** The x-coordinate (pixel value). */
-    public x!: Coordinate;
+	public x!: Coordinate;
 	/** The y-coordinate (pixel value). */
-    public y!: Coordinate;
-
-    /**
-     * Creates a new Point instance.
-     * @param x - The x-coordinate.
-     * @param y - The y-coordinate.
-     */	
-    public constructor(x: number, y: number)
-    public constructor(x: Coordinate, y: Coordinate) {
-        (this.x as Coordinate) = x;
-        (this.y as Coordinate) = y;
-    }
+	public y!: Coordinate;
 
 	/**
-     * Adds another point/vector to this one.
-     * @param point - The point to add.
-     * @returns A new Point representing the sum (`this + point`).
-     */
-    public add(point: Point): Point {
-        return new Point(this.x + point.x, this.y + point.y);
-    }
+	 * Creates a new Point instance.
+	 * @param x - The x-coordinate.
+	 * @param y - The y-coordinate.
+	 */
+	public constructor(x: number, y: number)
+	public constructor(x: Coordinate, y: Coordinate) {
+		(this.x as Coordinate) = x;
+		(this.y as Coordinate) = y;
+	}
 
-    /**
-     * Adds a scaled version of another point/vector to this one.
-     * Useful for linear interpolations or projections.
-     * 
-     * @param point - The direction vector to add.
-     * @param scale - The scalar factor to multiply `point` by before adding.
-     * @returns A new Point representing (`this + (point * scale)`).
-     */	
-    public addScaled(point: Point, scale: number): Point {
-        return new Point(this.x + scale * point.x, this.y + scale * point.y);
-    }
+	/**
+	 * Adds another point/vector to this one.
+	 * @param point - The point to add.
+	 * @returns A new Point representing the sum (`this + point`).
+	 */
+	public add(point: Point): Point {
+		return new Point(this.x + point.x, this.y + point.y);
+	}
 
-    /**
-     * Subtracts another point/vector from this one.
-     * @param point - The point to subtract.
-     * @returns A new Point representing the difference (`this - point`).
-     */	
-    public subtract(point: Point): Point {
-        return new Point(this.x - point.x, this.y - point.y);
-    }
+	/**
+	 * Adds a scaled version of another point/vector to this one.
+	 * Useful for linear interpolations or projections.
+	 * 
+	 * @param point - The direction vector to add.
+	 * @param scale - The scalar factor to multiply `point` by before adding.
+	 * @returns A new Point representing (`this + (point * scale)`).
+	 */
+	public addScaled(point: Point, scale: number): Point {
+		return new Point(this.x + scale * point.x, this.y + scale * point.y);
+	}
 
-    /**
-     * Calculates the dot product of this vector and another.
-     * Formula: `x1*x2 + y1*y2`.
-     * 
-     * @param point - The other vector.
-     * @returns The scalar dot product.
-     */	
-    public dotProduct(point: Point): number {
-        return this.x * point.x + this.y * point.y;
-    }
+	/**
+	 * Subtracts another point/vector from this one.
+	 * @param point - The point to subtract.
+	 * @returns A new Point representing the difference (`this - point`).
+	 */
+	public subtract(point: Point): Point {
+		return new Point(this.x - point.x, this.y - point.y);
+	}
 
-    /**
-     * Calculates the 2D cross product (determinant) magnitude of this vector and another.
-     * Formula: `x1*y2 - y1*x2`.
-     * 
-     * @param point - The other vector.
-     * @returns The scalar cross product.
-     */	
-    public crossProduct(point: Point): number {
-        return this.x * point.y - this.y * point.x;
-    }
+	/**
+	 * Calculates the dot product of this vector and another.
+	 * Formula: `x1*x2 + y1*y2`.
+	 * 
+	 * @param point - The other vector.
+	 * @returns The scalar dot product.
+	 */
+	public dotProduct(point: Point): number {
+		return this.x * point.x + this.y * point.y;
+	}
 
-    /**
-     * Calculates the signed angle between this vector and another.
-     * 
-     * @param point - The other vector.
-     * @returns The angle in radians (range -π to π).
-     */	
-    public signedAngle(point: Point): number {
-        return Math.atan2(this.crossProduct(point), this.dotProduct(point));
-    }
+	/**
+	 * Calculates the 2D cross product (determinant) magnitude of this vector and another.
+	 * Formula: `x1*y2 - y1*x2`.
+	 * 
+	 * @param point - The other vector.
+	 * @returns The scalar cross product.
+	 */
+	public crossProduct(point: Point): number {
+		return this.x * point.y - this.y * point.x;
+	}
 
-    /**
-     * Calculates the unsigned angle between this vector and another.
-     * 
-     * @param point - The other vector.
-     * @returns The angle in radians (range 0 to π).
-     */	
-    public angle(point: Point): number {
-        return Math.acos(this.dotProduct(point) / (this.length() * point.length()));
-    }
+	/**
+	 * Calculates the signed angle between this vector and another.
+	 * 
+	 * @param point - The other vector.
+	 * @returns The angle in radians (range -π to π).
+	 */
+	public signedAngle(point: Point): number {
+		return Math.atan2(this.crossProduct(point), this.dotProduct(point));
+	}
 
-    /**
-     * Calculates the Euclidean length (magnitude) of the vector.
-     * @returns The length of the vector.
-     */	
-    public length(): number {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
+	/**
+	 * Calculates the unsigned angle between this vector and another.
+	 * 
+	 * @param point - The other vector.
+	 * @returns The angle in radians (range 0 to π).
+	 */
+	public angle(point: Point): number {
+		return Math.acos(this.dotProduct(point) / (this.length() * point.length()));
+	}
 
-    /**
-     * Multiplies the vector by a scalar value.
-     * @param scale - The scaling factor.
-     * @returns A new scaled Point.
-     */	
-    public scaled(scale: number): Point {
-        return new Point(this.x * scale, this.y * scale);
-    }
+	/**
+	 * Calculates the Euclidean length (magnitude) of the vector.
+	 * @returns The length of the vector.
+	 */
+	public length(): number {
+		return Math.sqrt(this.x * this.x + this.y * this.y);
+	}
 
-   /**
-     * Returns a normalized version of the vector (unit vector with length 1).
-     * @returns A new Point with the same direction but length 1. Returns (0,0) if original length is 0.
-     */	
-    public normalized(): Point {
-        const len = this.length();
-        if (len === 0) return new Point(0 as Coordinate, 0 as Coordinate);
-        return new Point(this.x / len as Coordinate, this.y / len as Coordinate);
-    }
+	/**
+	 * Multiplies the vector by a scalar value.
+	 * @param scale - The scaling factor.
+	 * @returns A new scaled Point.
+	 */
+	public scaled(scale: number): Point {
+		return new Point(this.x * scale, this.y * scale);
+	}
 
-    /**
-     * Returns a perpendicular vector rotated 90 degrees counter-clockwise.
-     * Maps `(x, y)` to `(-y, x)`.
-     * 
-     * @returns A new transposed Point.
-     */	
-    public transposed(): Point {
-        return new Point(-this.y, this.x);
-    }
+	/**
+	  * Returns a normalized version of the vector (unit vector with length 1).
+	  * @returns A new Point with the same direction but length 1. Returns (0,0) if original length is 0.
+	  */
+	public normalized(): Point {
+		const len = this.length();
+		if (len === 0) return new Point(0 as Coordinate, 0 as Coordinate);
+		return new Point(this.x / len as Coordinate, this.y / len as Coordinate);
+	}
 
-    /**
-     * Creates a deep copy of this Point.
-     * @returns A new Point instance with identical coordinates.
-     */	
-    public clone(): Point {
-        return new Point(this.x, this.y);
-    }
+	/**
+	 * Returns a perpendicular vector rotated 90 degrees counter-clockwise.
+	 * Maps `(x, y)` to `(-y, x)`.
+	 * 
+	 * @returns A new transposed Point.
+	 */
+	public transposed(): Point {
+		return new Point(-this.y, this.x);
+	}
+
+	/**
+	 * Creates a deep copy of this Point.
+	 * @returns A new Point instance with identical coordinates.
+	 */
+	public clone(): Point {
+		return new Point(this.x, this.y);
+	}
 }
 
 /**
@@ -155,13 +164,13 @@ export class Point {
  * smallest x and y values, and `max` contains the largest.
  */
 export class Box {
-    public min: Point;
-    public max: Point;
+	public min: Point;
+	public max: Point;
 
-    public constructor(a: Point, b: Point) {
-        this.min = new Point(Math.min(a.x, b.x) as Coordinate, Math.min(a.y, b.y) as Coordinate);
-        this.max = new Point(Math.max(a.x, b.x) as Coordinate, Math.max(a.y, b.y) as Coordinate);
-    }
+	public constructor(a: Point, b: Point) {
+		this.min = new Point(Math.min(a.x, b.x) as Coordinate, Math.min(a.y, b.y) as Coordinate);
+		this.max = new Point(Math.max(a.x, b.x) as Coordinate, Math.max(a.y, b.y) as Coordinate);
+	}
 }
 
 /**
@@ -171,13 +180,13 @@ export class Box {
  * Used primarily for polygon clipping algorithms (e.g., Sutherland-Hodgman).
  */
 export class HalfPlane {
-    public edge: Line;
-    public isPositive: boolean;
+	public edge: Line;
+	public isPositive: boolean;
 
-    public constructor(edge: Line, isPositive: boolean) {
-        this.edge = edge;
-        this.isPositive = isPositive;
-    }
+	public constructor(edge: Line, isPositive: boolean) {
+		this.edge = edge;
+		this.isPositive = isPositive;
+	}
 }
 
 /**
@@ -187,9 +196,9 @@ export class HalfPlane {
  * handles vertical lines natively without division by zero.
  */
 export interface Line {
-    a: number;
-    b: number;
-    c: number;
+	a: number;
+	b: number;
+	c: number;
 }
 
 /**
@@ -309,40 +318,40 @@ export function equalBoxes(a: Box, b: Box): boolean {
  * @returns An array of points representing the clipped polygon, or `null` if the polygon is fully outside.
  */
 export function clipPolygonToViewport(points: Point[], W: number, H: number): Point[] | null {
-    if (points.length < 3) return null;
+	if (points.length < 3) return null;
 
-    let clippedPoints: Point[] = points;
-    const clipPlanes = [];
+	let clippedPoints: Point[] = points;
+	const clipPlanes = [];
 
-    // 1. Define the four clipping planes (HalfPlanes) based on the viewport boundaries.
+	// 1. Define the four clipping planes (HalfPlanes) based on the viewport boundaries.
 
-    // Clip against X > 0 (Left Edge)
-    // Edge: x = 0 (Line: a=1, b=0, c=0). Point (1, 1) is inside.
-    clipPlanes.push(halfPlaneThroughPoint(line(1, 0, 0), new Point(1 as Coordinate, 1 as Coordinate)));
+	// Clip against X > 0 (Left Edge)
+	// Edge: x = 0 (Line: a=1, b=0, c=0). Point (1, 1) is inside.
+	clipPlanes.push(halfPlaneThroughPoint(line(1, 0, 0), new Point(1 as Coordinate, 1 as Coordinate)));
 
-    // Clip against X < W (Right Edge)
-    // Edge: x = W (Line: a=1, b=0, c=-W). Point (W-1, 1) is inside.
-    clipPlanes.push(halfPlaneThroughPoint(line(1, 0, -W), new Point((W - 1) as Coordinate, 1 as Coordinate)));
+	// Clip against X < W (Right Edge)
+	// Edge: x = W (Line: a=1, b=0, c=-W). Point (W-1, 1) is inside.
+	clipPlanes.push(halfPlaneThroughPoint(line(1, 0, -W), new Point((W - 1) as Coordinate, 1 as Coordinate)));
 
-    // Clip against Y > 0 (Top Edge)
-    // Edge: y = 0 (Line: a=0, b=1, c=0). Point (1, 1) is inside.
-    clipPlanes.push(halfPlaneThroughPoint(line(0, 1, 0), new Point(1 as Coordinate, 1 as Coordinate)));
+	// Clip against Y > 0 (Top Edge)
+	// Edge: y = 0 (Line: a=0, b=1, c=0). Point (1, 1) is inside.
+	clipPlanes.push(halfPlaneThroughPoint(line(0, 1, 0), new Point(1 as Coordinate, 1 as Coordinate)));
 
-    // Clip against Y < H (Bottom Edge)
-    // Edge: y = H (Line: a=0, b=1, c=-H). Point (1, H-1) is inside.
-    clipPlanes.push(halfPlaneThroughPoint(line(0, 1, -H), new Point(1 as Coordinate, (H - 1) as Coordinate)));
+	// Clip against Y < H (Bottom Edge)
+	// Edge: y = H (Line: a=0, b=1, c=-H). Point (1, H-1) is inside.
+	clipPlanes.push(halfPlaneThroughPoint(line(0, 1, -H), new Point(1 as Coordinate, (H - 1) as Coordinate)));
 
 
-    // 2. Iteratively clip the polygon against each plane.
-    for (const plane of clipPlanes) {
-        const nextClipped = intersectPolygonAndHalfPlane(clippedPoints, plane);
-        if (nextClipped === null || nextClipped.length < 3) {
-            return null; // Fully clipped out
-        }
-        clippedPoints = nextClipped;
-    }
+	// 2. Iteratively clip the polygon against each plane.
+	for (const plane of clipPlanes) {
+		const nextClipped = intersectPolygonAndHalfPlane(clippedPoints, plane);
+		if (nextClipped === null || nextClipped.length < 3) {
+			return null; // Fully clipped out
+		}
+		clippedPoints = nextClipped;
+	}
 
-    return clippedPoints;
+	return clippedPoints;
 }
 
 /**
@@ -384,11 +393,11 @@ export function intersectLineAndBox(line: Line, box: Box): Segment | Point | nul
 	}
 
 	const points: Point[] = [];
-	const u = function(value: number): void {
+	const u = function (value: number): void {
 		const i = -(line.c + line.a * value) / line.b;
 		if (box.min.y <= i && i <= box.max.y) { addPoint(points, new Point(value as Coordinate, i as Coordinate)); }
 	};
-	const p = function(value: number): void {
+	const p = function (value: number): void {
 		const s = -(line.c + line.b * value) / line.a;
 		if (box.min.x <= s && s <= box.max.x) { addPoint(points, new Point(s as Coordinate, value as Coordinate)); }
 	};
@@ -453,7 +462,7 @@ export function intersectRayAndBox(point0: Point, point1: Point, box: Box): Poin
  * @returns The scalar coefficient `t` (0 to 1) along segment A where the intersection occurs, or `null` if they do not intersect.
  */
 export function intersectLineSegments(point0: Point, point1: Point, point2: Point, point3: Point): number | null {
-	const z = (function(e: Point, t: Point, i: Point, s: Point): number | null {
+	const z = (function (e: Point, t: Point, i: Point, s: Point): number | null {
 		const r = t.subtract(e);
 		const n = s.subtract(i);
 		const o = r.x * n.y - r.y * n.x;
@@ -671,17 +680,17 @@ export function intersectPolygonAndHalfPlane(points: Point[], halfPlane: HalfPla
 	for (let i = 0; i < points.length; ++i) {
 		const current = points[i];
 		const next = points[(i + 1) % points.length];
-		
-		// --- Check for null return from lineThroughPoints ---
-		const segmentLine = lineThroughPoints(current, next); 
 
-        // If the segment is degenerate (current === next), skip this iteration as no line exists
-        if (segmentLine === null) {
-            continue; 
-        }
+		// --- Check for null return from lineThroughPoints ---
+		const segmentLine = lineThroughPoints(current, next);
+
+		// If the segment is degenerate (current === next), skip this iteration as no line exists
+		if (segmentLine === null) {
+			continue;
+		}
 
 		// Use a temporary variable 'line' for clarity, which now holds a non-null Line object
-        const line: Line = segmentLine;
+		const line: Line = segmentLine;
 
 
 		if (pointInHalfPlane(current, halfPlane)) {
@@ -768,9 +777,9 @@ export function extendAndClipLineSegment(point0: Point, point1: Point, width: nu
 			const lineThrough = lineThroughPoints(point0, point1);
 
 			// --- Check for null return from lineThroughPoints ---
-            if (lineThrough === null) {
-                return null; // Fully degenerate line
-            }
+			if (lineThrough === null) {
+				return null; // Fully degenerate line
+			}
 
 			const intersection = intersectLineAndBox(lineThrough, clippingBox);
 			return intersection;
@@ -1103,26 +1112,26 @@ export function interpolateTimeFromLogicalIndex<HorzScaleItem>(
  * @returns An object containing `from` (bottom price) and `to` (top price), or `null` if the chart isn't ready.
  */
 export function getExtendedVisiblePriceRange<HorzScaleItem>(tool: BaseLineTool<HorzScaleItem>): { from: BarPrice | null; to: BarPrice | null; } | null {
-    
-    const chart = tool.getChart();
-    const series = tool.getSeries();
 
-    // 1. Get total widget height from the root element
-    const totalHeight = chart.chartElement().clientHeight;
+	const chart = tool.getChart();
+	const series = tool.getSeries();
 
-    // 2. Get the time scale height (this is the height of the whole time axis widget)
-    // NOTE: We rely on the internal height property for the Time Scale widget.
-    const timeScaleHeight = chart.timeScale().height() || 0; 
+	// 1. Get total widget height from the root element
+	const totalHeight = chart.chartElement().clientHeight;
 
-    // 3. Calculate the Pane Drawing Height: Total Height - Time Axis Height
-    // This value is what the coordinate system is based on (0 to PaneHeight).
-    const paneHeight = totalHeight - timeScaleHeight;
+	// 2. Get the time scale height (this is the height of the whole time axis widget)
+	// NOTE: We rely on the internal height property for the Time Scale widget.
+	const timeScaleHeight = chart.timeScale().height() || 0;
 
-    // 4. Calculate price range using the calculated pane height
-    return {
-        from: series.coordinateToPrice(paneHeight as Coordinate), // Price at bottom
-        to: series.coordinateToPrice(0 as Coordinate),           // Price at top
-    };
+	// 3. Calculate the Pane Drawing Height: Total Height - Time Axis Height
+	// This value is what the coordinate system is based on (0 to PaneHeight).
+	const paneHeight = totalHeight - timeScaleHeight;
+
+	// 4. Calculate price range using the calculated pane height
+	return {
+		from: series.coordinateToPrice(paneHeight as Coordinate), // Price at bottom
+		to: series.coordinateToPrice(0 as Coordinate),           // Price at top
+	};
 }
 
 
